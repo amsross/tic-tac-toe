@@ -19,7 +19,8 @@
 
 1. Start the game
    ```bash
-   deno task dev
+   ./docker.sh # Start the game in a Docker container
+   # deno task dev # Start the game locally
    ```
 1. Commands
    - `reset` - Clear the current game state
