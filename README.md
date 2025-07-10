@@ -18,10 +18,14 @@
 ## Playing the Game
 
 1. Start the game
-   ```bash
-   ./docker.sh # Start the game in a Docker container
-   # deno task dev # Start the game locally
-   ```
+   1. In a Docker container
+      ```bash
+      ./docker.sh
+      ```
+   1. In your terminal
+      ```bash
+      deno task dev
+      ```
 1. Commands
    - `reset` - Clear the current game state
    - `reset #` - Clear the current game state and set the difficulty level (1-10)
