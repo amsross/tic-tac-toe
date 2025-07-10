@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "dev": "deno run --watch src/main.ts",
+    "dev": "deno run --allow-env src/main.ts",
+    "dev:watch": "deno task dev --watch",
     "test": "deno test",
     "test:watch": "deno task test --watch"
   },
