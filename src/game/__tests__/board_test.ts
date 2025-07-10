@@ -41,30 +41,30 @@ Deno.test("board.value", () => {
   // initial state
   assertEquals(new Board().value, 0);
 
-  // X wins
-  assertEquals(
-    new Board(["X", "X", "O", "O", "X", "O", "X", "O", "X"]).value,
-    10,
-  );
-
   // O wins
   assertEquals(
-    new Board(["O", "O", "X", "X", "O", "X", "O", "X", "O"]).value,
+    new Board(["X", "X", "O", "O", "X", "O", "X", "O", "X"]).value,
     -10,
+  );
+
+  // X wins
+  assertEquals(
+    new Board(["O", "O", "X", "X", "O", "X", "O", "X", "O"]).value,
+    10,
   );
 
   assertEquals(
     new Board([null, null, null, null, "X", null, null, null, null]).value,
-    4,
-  );
-
-  assertEquals(
-    new Board([null, null, null, null, "O", null, null, null, null]).value,
     -4,
   );
 
   assertEquals(
+    new Board([null, null, null, null, "O", null, null, null, null]).value,
+    4,
+  );
+
+  assertEquals(
     new Board(["X", null, null, null, null, null, "O", null, "O"]).value,
-    -2,
+    2,
   );
 });
