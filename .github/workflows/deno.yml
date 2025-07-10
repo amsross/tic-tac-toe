@@ -55,12 +55,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
         with:
-          node-version: 'lts/*'
+          deno-version: v2.x
+
+      - name: Install dependencies
+        run: deno install
+
+
+      - name: Compile executable
+        run: |
+          deno compile --no-check --allow-env --target x86_64-pc-windows-msvc --output dist/x86_64-pc-windows-msvc src/main.ts
+          deno compile --no-check --allow-env --target x86_64-apple-darwin --output dist/x86_64-apple-darwin src/main.ts
+          deno compile --no-check --allow-env --target aarch64-apple-darwin --output dist/aarch64-apple-darwin src/main.ts
+          deno compile --no-check --allow-env --target x86_64-unknown-linux-gnu --output dist/x86_64-unknown-linux-gnu src/main.ts
+          deno compile --no-check --allow-env --target aarch64-unknown-linux-gnu --output dist/aarch64-unknown-linux-gnu src/main.ts
 
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: deno run -A npm:semantic-release
