@@ -18,13 +18,16 @@
 ## Playing the Game
 
 1. Start the game
-   1. In a Docker container
-      ```bash
-      ./docker.sh
-      ```
    1. In your terminal
       ```bash
       deno task dev
+      ```
+   1. Download a static binary from the [latest release](https://github.com/amsross/tic-tac-toe/releases/latest)
+   1. In a Docker container
+      ```bash
+      docker run --rm -it --name tic-tac-toe \
+        -v $PWD:/tic-tac-toe denoland/deno:2.3.3 \
+        run --allow-env /tic-tac-toe/src/main.ts
       ```
 1. Commands
    - `reset` - Clear the current game state
