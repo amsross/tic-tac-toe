@@ -1,7 +1,7 @@
 import { Interface } from "node:readline";
 import { createInterface } from "node:readline/promises";
 import process from "node:process";
-import { AI, Board, Score } from "./game/index.ts";
+import { AI, Board, MinimaxAI, Score } from "./game/index.ts";
 
 const example = new Board([0, 1, 2, 3, 4, 5, 6, 7, 8]).toString();
 
@@ -85,7 +85,7 @@ if (import.meta.main) {
     });
 
     const board = new Board<"X" | "O">();
-    const ai = new AI({ difficulty: 1 });
+    const ai = new MinimaxAI({ difficulty: 1 });
 
     main(rl, board, ai);
   })();

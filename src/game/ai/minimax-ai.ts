@@ -1,24 +1,10 @@
-import { Stack, Tree } from "../data-structures/index.ts";
-import { Board, Score } from "./index.ts";
+import { Stack, Tree } from "../../data-structures/index.ts";
+import { Board, Score } from "../index.ts";
+import { AI } from "./ai.ts";
 
-export class AI {
-  #difficulty: number = 1;
-
-  get difficulty(): number {
-    return this.#difficulty;
-  }
-
-  set difficulty(difficulty: number) {
-    if (difficulty < 1 || difficulty > 10) {
-      throw new Error("Difficulty must be between 1 and 10");
-    }
-    this.#difficulty = difficulty;
-  }
-
-  constructor({ difficulty = 1 }: { difficulty?: number }) {
-    this.difficulty = difficulty;
-  }
-
+// https://en.wikipedia.org/wiki/Minimax
+// https://www.math.umd.edu/~immortal/CMSC351/notes/minimax.pdf
+export class MinimaxAI extends AI {
   private createTree(
     startingBoard: Board<"X" | "O">,
     depth: number,
@@ -49,8 +35,6 @@ export class AI {
     return tree;
   }
 
-  // https://en.wikipedia.org/wiki/Minimax
-  // https://www.math.umd.edu/~immortal/CMSC351/notes/minimax.pdf
   private minimax(
     tree: Tree<[Board<"X" | "O">, number]>,
     node: number,
@@ -86,7 +70,7 @@ export class AI {
   }
 
   getNextMove(board: Board<"X" | "O">): number {
-    const tree = this.createTree(board, this.#difficulty);
+    const tree = this.createTree(board, this.difficulty);
 
     const [bestNodeIndex] = this.minimax(tree, 0, 0);
     const [, move] = tree.getNode(bestNodeIndex)!;
