@@ -1,5 +1,13 @@
 # TicTacToe Game
 
+## References
+
+1. [Artificial Intelligence Illuminated](https://books.google.com/books/about/Artificial_Intelligence_Illuminated.html?id=LcOLqodW28EC)
+1. [Artificial Intelligence: A Modern Approach](https://aima.cs.berkeley.edu/)
+1. https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
+1. https://en.wikipedia.org/wiki/Minimax
+1. https://www.math.umd.edu/~immortal/CMSC351/notes/minimax.pdf
+
 ## Development
 
 1. Install dependencies
