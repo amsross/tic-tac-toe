@@ -1,31 +1,24 @@
 import { Interface } from "node:readline";
 import { createInterface } from "node:readline/promises";
 import process from "node:process";
-import { AI, Board } from "./game/index.ts";
+import { AI, Board, Score } from "./game/index.ts";
 
-const example = `
-  0  |  1  |  2
------------------
-  3  |  4  |  5
------------------
-  6  |  7  |  8
-`;
+const example = new Board([0, 1, 2, 3, 4, 5, 6, 7, 8]).toString();
 
-export const main = (rl: Interface, board: Board, ai: AI) => {
+export const main = (rl: Interface, board: Board<"X" | "O">, ai: AI) => {
   console.clear();
   console.log("Tic-Tac-Toe");
   console.log(example);
-  console.log(`difficulty ${ai.difficulty}`);
   console.log("");
   console.log(board.toString());
   console.log("");
+  console.log(`difficulty ${ai.difficulty}`);
   rl.prompt();
 
   rl.on("line", (line) => {
     console.clear();
     console.log("Tic-Tac-Toe");
     console.log(example);
-    console.log(`difficulty ${ai.difficulty}`);
 
     const command = line.trim().toLowerCase();
     if (command === "exit") {
@@ -46,18 +39,22 @@ export const main = (rl: Interface, board: Board, ai: AI) => {
       console.log("");
     } else if (command.match(/^\d+$/)) {
       try {
-        board.move(parseInt(command, 10), "X");
+        if (!Score.isGameOver(board)) {
+          board.move(parseInt(command, 10), "X");
 
-        if (board.isGameOver()) {
-          console.log("Game Over!");
-          ai.difficulty += 1;
-        } else {
-          board.move(ai.processBoard(board), "O");
-          if (board.isGameOver()) {
+          if (Score.isGameOver(board)) {
             console.log("Game Over!");
+            ai.difficulty += 1;
           } else {
-            console.log("");
+            board.move(ai.getNextMove(board), "O");
+            if (Score.isGameOver(board)) {
+              console.log("Game Over!");
+            } else {
+              console.log("");
+            }
           }
+        } else {
+          console.log("Game Over!");
         }
       } catch (error) {
         console.error(`${error}`);
@@ -70,6 +67,7 @@ export const main = (rl: Interface, board: Board, ai: AI) => {
 
     console.log(board.toString());
     console.log("");
+    console.log(`difficulty ${ai.difficulty}`);
 
     rl.prompt();
   }).on("close", () => {
@@ -86,7 +84,7 @@ if (import.meta.main) {
       prompt: "your move> ",
     });
 
-    const board = new Board();
+    const board = new Board<"X" | "O">();
     const ai = new AI({ difficulty: 1 });
 
     main(rl, board, ai);

@@ -1,5 +1,5 @@
 import { LCRSTree, Stack } from "../data-structures/index.ts";
-import { Board } from "./index.ts";
+import { Board, Score } from "./index.ts";
 
 export class AI {
   #difficulty: number = 1;
@@ -20,17 +20,17 @@ export class AI {
   }
 
   private createTree(
-    startingBoard: Board,
+    startingBoard: Board<"X" | "O">,
     depth: number,
-  ): LCRSTree<[Board, number]> {
-    const tree = new LCRSTree<[Board, number]>([startingBoard, -1]);
+  ): LCRSTree<[Board<"X" | "O">, number]> {
+    const tree = new LCRSTree<[Board<"X" | "O">, number]>([startingBoard, -1]);
     const stack = new Stack<[number, number]>();
     stack.push([0, 0]);
 
     for (const [treeNode, previousDepth] of stack) {
       const [previousBoard] = tree.getNode(treeNode)!;
       if (
-        previousDepth >= depth || previousBoard.isGameOver()
+        previousDepth >= depth || Score.isGameOver(previousBoard)
       ) {
         continue;
       }
@@ -52,15 +52,15 @@ export class AI {
   // https://en.wikipedia.org/wiki/Minimax
   // https://www.math.umd.edu/~immortal/CMSC351/notes/minimax.pdf
   private minimax(
-    tree: LCRSTree<[Board, number]>,
+    tree: LCRSTree<[Board<"X" | "O">, number]>,
     node: number,
     depth: number,
   ): [number, number] {
     const [board] = tree.getNode(node)!;
     const childNodes = tree.getChildren(node);
 
-    if (childNodes.length === 0 || board.isGameOver()) {
-      return [node, board?.value ?? 0];
+    if (childNodes.length === 0 || Score.isGameOver(board)) {
+      return [node, Score.getScore(board)];
     }
 
     let bestScore = depth % 2 === 0 ? -Infinity : Infinity;
@@ -85,17 +85,12 @@ export class AI {
     return [node === 0 ? bestNode : node, bestScore];
   }
 
-  private getNextMove(tree: LCRSTree<[Board, number]>): number {
-    const [bestNodeIndex] = this.minimax(tree, 0, 0);
+  getNextMove(board: Board<"X" | "O">): number {
+    const tree = this.createTree(board, this.#difficulty);
 
+    const [bestNodeIndex] = this.minimax(tree, 0, 0);
     const [, move] = tree.getNode(bestNodeIndex)!;
 
     return move;
-  }
-
-  processBoard(board: Board): number {
-    const tree = this.createTree(board, this.#difficulty);
-
-    return this.getNextMove(tree);
   }
 }

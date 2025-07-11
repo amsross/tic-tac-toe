@@ -1,24 +1,16 @@
-const cellToString = (cell: "X" | "O" | null): string => cell || " ";
+type Mark<T> = T | null;
 
-const scoringLines: [number, number, number][] = [
-  [0, 1, 2], // horizontal
-  [3, 4, 5], // horizontal
-  [6, 7, 8], // horizontal
-  [0, 3, 6], // vertical
-  [1, 4, 7], // vertical
-  [2, 5, 8], // vertical
-  [0, 4, 8], // diagonal
-  [2, 4, 6], // diagonal
-];
+const cellToString = <T>(cell: Mark<T>): string =>
+  cell !== null ? `${cell}` : " ";
 
-export class Board {
-  private cells: ("X" | "O" | null)[];
+export class Board<T> {
+  private cells: (Mark<T>)[];
 
-  asSeed(): ("X" | "O" | null)[] {
+  asSeed(): (Mark<T>)[] {
     return structuredClone(this.cells);
   }
 
-  constructor(seed?: ("X" | "O" | null)[]) {
+  constructor(seed?: (Mark<T>)[]) {
     this.cells = seed ?? Array(9).fill(null);
   }
 
@@ -38,7 +30,7 @@ export class Board {
       }, []);
   }
 
-  move(index: number, mark: "X" | "O"): this {
+  move(index: number, mark: NonNullable<Mark<T>>): this {
     if (index < 0 || index > 8) {
       throw new Error("Index out of bounds");
     }
@@ -67,60 +59,7 @@ export class Board {
 `;
   }
 
-  isGameOver(): boolean {
-    // every cell in the scoring line is occupied
-    if (this.getAvailableCells().length === 0) {
-      return true;
-    }
-
-    let totalX = 0;
-    let totalO = 0;
-    for (const scoringLine of scoringLines) {
-      const scoreX = this.scoreLine("X", scoringLine);
-      const scoreO = this.scoreLine("O", scoringLine);
-      totalX += scoreX;
-      totalO += scoreO;
-
-      // one of the players has won
-      if (scoreX >= 10 || scoreO >= 10) {
-        return true;
-      }
-    }
-
-    // no more legal moves left
-    if (totalX === 0 && totalO === 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  private scoreLine(
-    mark: "X" | "O",
-    scoringLine: [number, number, number],
-  ): number {
-    if (scoringLine.every((index) => this.cells[index] === mark)) {
-      return 10;
-    }
-
-    if (
-      scoringLine.every((index) =>
-        this.cells[index] === mark ||
-        this.cells[index] === null
-      )
-    ) {
-      return 1;
-    }
-
-    return 0;
-  }
-
-  get value(): number {
-    return scoringLines.reduce((acc, scoringLine) => {
-      const scoreX = this.scoreLine("X", scoringLine) * -1;
-      const scoreO = this.scoreLine("O", scoringLine);
-
-      return acc + scoreX + scoreO;
-    }, 0);
+  getMarkAt(cell: number): Mark<T> {
+    return this.cells[cell];
   }
 }
