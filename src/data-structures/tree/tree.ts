@@ -1,5 +1,6 @@
 // Left-Child Right-Sibling Tree
-export class LCRSTree<T> {
+// https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
+export class Tree<T> {
   private nodes: T[] = [];
 
   constructor(rootNode: T) {

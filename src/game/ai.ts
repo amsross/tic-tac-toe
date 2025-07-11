@@ -1,4 +1,4 @@
-import { LCRSTree, Stack } from "../data-structures/index.ts";
+import { Stack, Tree } from "../data-structures/index.ts";
 import { Board, Score } from "./index.ts";
 
 export class AI {
@@ -22,8 +22,8 @@ export class AI {
   private createTree(
     startingBoard: Board<"X" | "O">,
     depth: number,
-  ): LCRSTree<[Board<"X" | "O">, number]> {
-    const tree = new LCRSTree<[Board<"X" | "O">, number]>([startingBoard, -1]);
+  ): Tree<[Board<"X" | "O">, number]> {
+    const tree = new Tree<[Board<"X" | "O">, number]>([startingBoard, -1]);
     const stack = new Stack<[number, number]>();
     stack.push([0, 0]);
 
@@ -52,7 +52,7 @@ export class AI {
   // https://en.wikipedia.org/wiki/Minimax
   // https://www.math.umd.edu/~immortal/CMSC351/notes/minimax.pdf
   private minimax(
-    tree: LCRSTree<[Board<"X" | "O">, number]>,
+    tree: Tree<[Board<"X" | "O">, number]>,
     node: number,
     depth: number,
   ): [number, number] {

@@ -1,10 +1,10 @@
 import { assertEquals } from "@std/assert";
-import { LCRSTree } from "../lc-rs-tree.ts";
+import { Tree } from "../../tree/tree.ts";
 
 // https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
 // https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree#/media/File:N-ary_to_binary.svg
-Deno.test(function LCRSTree_addChild() {
-  const tree = new LCRSTree<string>("A");
+Deno.test(function Tree_addChild() {
+  const tree = new Tree<string>("A");
 
   // first children should be at 2n+1 where n is the parent index
   // subsequent children should be at 2n+1 where n is the previous child's index
